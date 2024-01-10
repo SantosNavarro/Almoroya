@@ -1,0 +1,66 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: rgb(125, 169, 179);
+}
+header {
+  align-items: center;
+  background-color:rgb(164, 131, 88)
+}
+header, nav, main, footer {
+  margin: 0;
+  padding: 20px;
+}
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+nav ul li {
+  display: inline;
+  margin-right: 10px;
+}
+
+@media (max-width: 600px) {
+  .container {
+      width: 100%;
+  }
+}
+
+
+nav {
+ 
+  color: #fff;
+  padding: 15px;
+}
+
+
+main {
+  padding: 20px;
+  background-color: #fff;
+}
+
+h2 {
+  color: #333;
+}
+
+
+
+
+img {
+  align-items: center;
+  max-width: 30%;
+  height: auto;
+}
+footer { 
+  background-color: blanchedalmond;
+  text-align: center; 
+} 
+p {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+i.fa-brands {
+   margin: 0 10px; 
+  }

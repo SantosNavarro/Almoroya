@@ -1,0 +1,68 @@
+body {
+  background-color: #7da9b3;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-color: #a48358;
+  align-items: center;
+}
+
+header, nav, main, footer {
+  margin: 0;
+  padding: 20px;
+}
+
+nav ul {
+  padding: 0;
+  list-style: none;
+}
+
+nav ul li {
+  margin-right: 10px;
+  display: inline;
+}
+
+@media (width <= 600px) {
+  .container {
+    width: 100%;
+  }
+}
+
+nav {
+  color: #fff;
+  padding: 15px;
+}
+
+main {
+  background-color: #fff;
+  padding: 20px;
+}
+
+h2 {
+  color: #333;
+}
+
+img {
+  align-items: center;
+  max-width: 30%;
+  height: auto;
+}
+
+footer {
+  text-align: center;
+  background-color: #ffebcd;
+}
+
+p {
+  text-align: center;
+  color: #333;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+i.fa-brands {
+  margin: 0 10px;
+}
+
+/*# sourceMappingURL=index.c92073ef.css.map */

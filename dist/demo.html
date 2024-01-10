@@ -1,0 +1,20 @@
+new BootstrapCookieConsent({
+
+    services: [],
+
+    services_descr: [],
+    'show_selector'   : '.cc',
+    'accept_id'       : 'accept-cookie',
+    'banner_text'     : 'Ce site utilise des services tiers susceptible de vous déposer un cookie. Pour une navigation optimale, acceptez-vous de les utiliser sur ce site ?',
+    'button_text'     : 'J\'accepte',
+    'banner_id'       : 'cookies-banner',
+    'link_more_info'  : '#',
+    'more_info_label' : 'En savoir plus',
+    'details_title'   : 'Vie Privée',
+    'details_text'    : 'Vous pouvez accepter ou refuster l\'utilisation sur ce site de certains services.',
+    'checkbox_class'  : 'custom-control-input',
+    cookieName: 'cookie_consent_settings', // From cookie-consent-api
+    cookieDuration: 365,
+    cookieDomain: null,
+    method: 1, // 0: native bootstrap, 1: jquery (classic) bootstrap
+});
