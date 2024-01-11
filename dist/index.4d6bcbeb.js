@@ -581,11 +581,13 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"gLLPy":[function(require,module,exports) {
 var _all = require("@fortawesome/fontawesome-free/js/all");
 var _bootstrap = require("bootstrap");
+var _ = require("simple-slider/");
 $(document).ready(function() {
     cookiesManager();
 });
+(0, _.getSlider)();
 
-},{"@fortawesome/fontawesome-free/js/all":"9lkDh","bootstrap":"h36JB"}],"9lkDh":[function(require,module,exports) {
+},{"@fortawesome/fontawesome-free/js/all":"9lkDh","bootstrap":"h36JB","simple-slider/":"1DJGO"}],"9lkDh":[function(require,module,exports) {
 /*!
  * Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
@@ -26382,6 +26384,179 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["75sNA","gLLPy"], "gLLPy", "parcelRequiref2ce")
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1DJGO":[function(require,module,exports) {
+(function(global, factory) {
+    if (typeof define === "function" && define.amd) define([
+        "exports"
+    ], factory);
+    else {
+        var mod;
+        factory(exports);
+    }
+})(this, function(exports1) {
+    "use strict";
+    Object.defineProperty(exports1, "__esModule", {
+        value: true
+    });
+    function getdef(val, def) {
+        return val == null ? def : val;
+    }
+    function len(arr) {
+        return (arr || []).length;
+    }
+    function startSlides(containerElem, children, unit, startVal, visVal, trProp) {
+        var style = void 0, imgs = [];
+        if (!children) children = containerElem.children;
+        var i = len(children);
+        while(--i >= 0){
+            imgs[i] = children[i];
+            style = imgs[i].style;
+            style.position = "absolute";
+            style.top = style.left = style.zIndex = 0;
+            style[trProp] = startVal + unit;
+        }
+        style[trProp] = visVal + unit;
+        style.zIndex = 1;
+        return imgs;
+    }
+    function defaultEase(time, begin, change, duration) {
+        return (time = time / (duration / 2)) < 1 ? change / 2 * time * time * time + begin : change / 2 * ((time -= 2) * time * time + 2) + begin;
+    }
+    function getSlider(options) {
+        options = options || {};
+        var actualIndex = void 0, interval = void 0, intervalStartTime = void 0, imgs = void 0, remainingTime = void 0;
+        var containerElem = getdef(options.container, document.querySelector("*[data-simple-slider]"));
+        var trProp = getdef(options.prop, "left");
+        var trTime = getdef(options.duration, 0.5) * 1000;
+        var delay = getdef(options.delay, 3) * 1000;
+        var unit = getdef(options.unit, "%");
+        var startVal = getdef(options.init, -100);
+        var visVal = getdef(options.show, 0);
+        var endVal = getdef(options.end, 100);
+        var paused = options.paused;
+        var ease = getdef(options.ease, defaultEase);
+        var onChange = getdef(options.onChange, 0);
+        var onChangeEnd = getdef(options.onChangeEnd, 0);
+        var now = Date.now;
+        function reset() {
+            if (len(containerElem.children) > 0) {
+                var style = containerElem.style;
+                style.position = "relative";
+                style.overflow = "hidden";
+                style.display = "block";
+                imgs = startSlides(containerElem, options.children, unit, startVal, visVal, trProp);
+                actualIndex = 0;
+                remainingTime = delay;
+            }
+        }
+        function setAutoPlayLoop() {
+            intervalStartTime = now();
+            interval = setTimeout(function() {
+                intervalStartTime = now();
+                remainingTime = delay;
+                change(nextIndex());
+                setAutoPlayLoop();
+            }, remainingTime);
+        }
+        function resume() {
+            if (isAutoPlay()) {
+                if (interval) clearTimeout(interval);
+                setAutoPlayLoop();
+            }
+        }
+        function isAutoPlay() {
+            return !paused && len(imgs) > 1;
+        }
+        function pause() {
+            if (isAutoPlay()) {
+                remainingTime = delay - (now() - intervalStartTime);
+                clearTimeout(interval);
+                interval = 0;
+            }
+        }
+        function reverse() {
+            var newEndVal = startVal;
+            startVal = endVal;
+            endVal = newEndVal;
+            actualIndex = Math.abs(actualIndex - (len(imgs) - 1));
+            imgs = imgs.reverse();
+        }
+        function change(newIndex) {
+            var count = len(imgs);
+            while(--count >= 0)imgs[count].style.zIndex = 1;
+            imgs[newIndex].style.zIndex = 3;
+            imgs[actualIndex].style.zIndex = 2;
+            anim(imgs[actualIndex].style, visVal, endVal, imgs[newIndex].style, startVal, visVal, trTime, 0, 0, ease);
+            actualIndex = newIndex;
+            if (onChange) onChange(prevIndex(), actualIndex);
+        }
+        function next() {
+            change(nextIndex());
+            resume();
+        }
+        function prev() {
+            change(prevIndex());
+            resume();
+        }
+        function nextIndex() {
+            var newIndex = actualIndex + 1;
+            return newIndex >= len(imgs) ? 0 : newIndex;
+        }
+        function prevIndex() {
+            var newIndex = actualIndex - 1;
+            return newIndex < 0 ? len(imgs) - 1 : newIndex;
+        }
+        function dispose() {
+            clearTimeout(interval);
+            document.removeEventListener("visibilitychange", visibilityChange);
+            imgs = containerElem = interval = trProp = trTime = delay = startVal = endVal = paused = actualIndex = remainingTime = onChange = onChangeEnd = null;
+        }
+        function currentIndex() {
+            return actualIndex;
+        }
+        function anim(insertElem, insertFrom, insertTo, removeElem, removeFrom, removeTo, transitionDuration, startTime, elapsedTime, easeFunc) {
+            function setProp(elem, from, to) {
+                elem[trProp] = easeFunc(elapsedTime - startTime, from, to - from, transitionDuration) + unit;
+            }
+            if (startTime > 0) {
+                if (elapsedTime - startTime < transitionDuration) {
+                    setProp(insertElem, insertFrom, insertTo);
+                    setProp(removeElem, removeFrom, removeTo);
+                } else {
+                    insertElem[trProp] = insertTo + unit;
+                    removeElem[trProp] = removeTo + unit;
+                    if (onChangeEnd) onChangeEnd(actualIndex, nextIndex());
+                    return;
+                }
+            }
+            requestAnimationFrame(function(time) {
+                if (startTime === 0) startTime = time;
+                anim(insertElem, insertFrom, insertTo, removeElem, removeFrom, removeTo, transitionDuration, startTime, time, easeFunc);
+            });
+        }
+        function visibilityChange() {
+            if (document.hidden) pause();
+            else resume();
+        }
+        document.addEventListener("visibilitychange", visibilityChange);
+        reset();
+        if (len(imgs) > 1) resume();
+        return {
+            currentIndex: currentIndex,
+            pause: pause,
+            resume: resume,
+            nextIndex: nextIndex,
+            prevIndex: prevIndex,
+            next: next,
+            prev: prev,
+            change: change,
+            reverse: reverse,
+            dispose: dispose
+        };
+    }
+    exports1.getSlider = getSlider;
+});
+
+},{}]},["75sNA","gLLPy"], "gLLPy", "parcelRequiref2ce")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map

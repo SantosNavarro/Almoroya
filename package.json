@@ -25,6 +25,7 @@
     "bootstrap-cookie-alert": "^1.2.2",
     "bootstrap-cookie-consent": "^0.0.7",
     "bootstrap-cookie-manager": "^1.1.1",
-    "posthtml": "^0.16.6"
+    "posthtml": "^0.16.6",
+    "simple-slider": "^1.0.1"
   }
 }
